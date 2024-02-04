@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SGPA Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(purple, pink);
+            color: white;
+        }
+        .course {
+            margin-bottom: 10px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>SGPA Calculator</h1>
+    <div id="courses"></div>
+    <button onclick="calculateSGPA()">Calculate SGPA</button>
+    <button onclick="switchTheme()">Switch Theme</button>
+    <div id="result"></div>
+
+    <script>
+        const grades = {
+            'A': 5.0,
+            'B': 4.0,
+            'C': 3.0,
+            'D': 2.0,
+            'E': 1.0,
+            'F': 0.0
+        };
+
+        for(let i = 0; i < 12; i++) {
+            const courseDiv = document.createElement('div');
+            courseDiv.className = 'course';
+            courseDiv.innerHTML = `
+                <input type="text" placeholder="Course Name" id="name${i}">
+                <input type="number" placeholder="Credit Unit" id="unit${i}">
+                <select id="grade${i}">
+                    ${Object.keys(grades).map(grade => `<option value="${grade}">${grade}</option>`).join('')}
+                </select>
+            `;
+            document.getElementById('courses').appendChild(courseDiv);
+        }
+
+        function calculateSGPA() {
+            let totalCP = 0, totalCU = 0;
+
+            for(let i = 0; i < 12; i++) {
+                const unit = document.getElementById(`unit${i}`).value;
+                const grade = document.getElementById(`grade${i}`).value;
+                const cp = unit * grades[grade];
+                totalCP += cp;
+                totalCU += parseFloat(unit);
+            }
+
+            const sgpa = totalCP / totalCU;
+            document.getElementById('result').innerText = `Your SGPA is ${sgpa.toFixed(2)}`;
+        }
+
+        function switchTheme() {
+            if (document.body.style.background.includes('purple')) {
+                document.body.style.background = 'linear-gradient(black, grey, purple)';
+            } else {
+                document.body.style.background = 'linear-gradient(purple, pink)';
+            }
+        }
+    </script>
+</body>
+</html>
